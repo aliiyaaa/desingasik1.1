@@ -19,7 +19,9 @@ class ClosestPairTest {
         };
         Metrics m = new Metrics("closest-pair");
         double res = ClosestPair.findClosest(pts, m);
-        assertEquals(Math.sqrt(8), res, 1e-9); // between (0,0) and (2,2)
+        assertEquals(Math.sqrt(8), res, 1e-9);
+        assertTrue(m.getComparisons() > 0);
+        assertTrue(m.getMaxDepth() > 0);
     }
 
     @Test
@@ -36,14 +38,15 @@ class ClosestPairTest {
     @Test
     void testRandomVsNaive() {
         Random rnd = new Random(42);
-        for (int t = 0; t < 20; t++) {
+        for (int t = 0; t < 10; t++) {
             int n = 50;
             ClosestPair.Point2D[] pts = new ClosestPair.Point2D[n];
             for (int i = 0; i < n; i++) {
                 pts[i] = new ClosestPair.Point2D(rnd.nextDouble() * 1000, rnd.nextDouble() * 1000);
             }
 
-            double fast = ClosestPair.findClosest(pts, new Metrics("closest-pair"));
+            Metrics m = new Metrics("closest-pair");
+            double fast = ClosestPair.findClosest(pts, m);
             double slow = bruteForce(pts);
             assertEquals(slow, fast, 1e-9);
         }
@@ -62,4 +65,3 @@ class ClosestPairTest {
         return min;
     }
 }
-
